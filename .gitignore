@@ -1,0 +1,11 @@
+# Carpetas de Visual Studio
+.vs/
+.vscode/
+
+# Archivos binarios y de compilación
+bin/
+obj/
+
+# Archivos de configuración del sistema operativo
+.DS_Store
+Thumbs.db
