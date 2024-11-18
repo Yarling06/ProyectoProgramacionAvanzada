@@ -1,5 +1,5 @@
-cd namespace ProyectoProgramacionAvanzada.Models
-{
+namespace ProyectoProgramacionAvanzada.Models
+{ 
     public class ErrorViewModel
     {
         public string? RequestId { get; set; }
