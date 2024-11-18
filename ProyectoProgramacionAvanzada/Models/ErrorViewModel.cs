@@ -1,4 +1,4 @@
-namespace ProyectoProgramacionAvanzada.Models
+cd namespace ProyectoProgramacionAvanzada.Models
 {
     public class ErrorViewModel
     {
