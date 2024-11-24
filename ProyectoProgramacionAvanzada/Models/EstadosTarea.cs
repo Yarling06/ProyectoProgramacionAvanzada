@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ProyectoProgramacionAvanzada.Models;
 
-public partial class EstadosTarea
+public class EstadosTarea
 {
-    public int EstadoId { get; set; }
+    public int EstadoID { get; set; }
 
     public string NombreEstado { get; set; } = null!;
 

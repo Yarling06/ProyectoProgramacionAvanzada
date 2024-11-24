@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +33,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
             }
 
             var estadosTarea = await _context.EstadosTareas
-                .FirstOrDefaultAsync(m => m.EstadoId == id);
+                .FirstOrDefaultAsync(m => m.EstadoID == id);
             if (estadosTarea == null)
             {
                 return NotFound();
@@ -87,7 +87,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EstadoId,NombreEstado")] EstadosTarea estadosTarea)
         {
-            if (id != estadosTarea.EstadoId)
+            if (id != estadosTarea.EstadoID)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EstadosTareaExists(estadosTarea.EstadoId))
+                    if (!EstadosTareaExists(estadosTarea.EstadoID))
                     {
                         return NotFound();
                     }
@@ -124,7 +124,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
             }
 
             var estadosTarea = await _context.EstadosTareas
-                .FirstOrDefaultAsync(m => m.EstadoId == id);
+                .FirstOrDefaultAsync(m => m.EstadoID == id);
             if (estadosTarea == null)
             {
                 return NotFound();
@@ -150,7 +150,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
 
         private bool EstadosTareaExists(int id)
         {
-            return _context.EstadosTareas.Any(e => e.EstadoId == id);
+            return _context.EstadosTareas.Any(e => e.EstadoID == id);
         }
     }
 }

@@ -1,4 +1,4 @@
-@model ProyectoProgramacionAvanzada.Models.Tarea
+ @model ProyectoProgramacionAvanzada.Models.Tarea
 
 @{
     ViewData["Title"] = "Create";
@@ -8,8 +8,8 @@
 
 <h4>Tarea</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -19,25 +19,27 @@
             </div>
             <div class="form-group">
                 <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
+                <textarea asp-for="Descripcion" class="form-control"></textarea>
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PrioridadId" class="control-label"></label>
-                <select asp-for="PrioridadId" class ="form-control" asp-items="ViewBag.PrioridadId"></select>
+                <label asp-for="PrioridadID" class="control-label"></label>
+                <select asp-for="PrioridadID" class="form-control" asp-items="ViewBag.PrioridadID"></select>
+                <span asp-validation-for="PrioridadID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EstadoId" class="control-label"></label>
-                <select asp-for="EstadoId" class ="form-control" asp-items="ViewBag.EstadoId"></select>
+                <label asp-for="EstadoID" class="control-label"></label>
+                <select asp-for="EstadoID" class="form-control" asp-items="ViewBag.EstadoID"></select>
+                <span asp-validation-for="EstadoID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FechaEjecucion" class="control-label"></label>
-                <input asp-for="FechaEjecucion" class="form-control" />
+                <input asp-for="FechaEjecucion" class="form-control" type="date" />
                 <span asp-validation-for="FechaEjecucion" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FechaFinalizacion" class="control-label"></label>
-                <input asp-for="FechaFinalizacion" class="form-control" />
+                <input asp-for="FechaFinalizacion" class="form-control" type="date" />
                 <span asp-validation-for="FechaFinalizacion" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -46,11 +48,14 @@
         </form>
     </div>
 </div>
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

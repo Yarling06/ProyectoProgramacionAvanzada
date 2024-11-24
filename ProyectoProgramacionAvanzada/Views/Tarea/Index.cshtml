@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProyectoProgramacionAvanzada.Models.Tarea>
+@model IEnumerable<ProyectoProgramacionAvanzada.Models.Tarea>
 
 @{
     ViewData["Title"] = "Index";
@@ -55,10 +55,10 @@
                 @Html.DisplayFor(modelItem => item.FechaFinalizacion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado.EstadoId)
+                @Html.DisplayFor(modelItem => item.Estado.EstadoID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Prioridad.PrioridadId)
+                @Html.DisplayFor(modelItem => item.Prioridad.PrioridadID)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.TareaId">Edit</a> |

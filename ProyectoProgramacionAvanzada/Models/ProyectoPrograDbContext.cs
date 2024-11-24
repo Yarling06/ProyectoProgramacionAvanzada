@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,20 +24,19 @@ public partial class ProyectoPrograDbContext : DbContext
     public virtual DbSet<Tarea> Tareas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=LAPTOP-H8F30GDD;Database=ProyectoPrograDB;Trusted_Connection=True;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<EstadosTarea>(entity =>
         {
-            entity.HasKey(e => e.EstadoId).HasName("PK__EstadosT__FEF86B603D2331A8");
+            entity.HasKey(e => e.EstadoID).HasName("PK__EstadosT__FEF86B603D2331A8");
 
             entity.ToTable("EstadosTarea");
 
             entity.HasIndex(e => e.NombreEstado, "UQ__EstadosT__6CE50615135F16DF").IsUnique();
 
-            entity.Property(e => e.EstadoId).HasColumnName("EstadoID");
+            entity.Property(e => e.EstadoID).HasColumnName("EstadoID");
             entity.Property(e => e.NombreEstado).HasMaxLength(50);
         });
 
@@ -48,14 +47,14 @@ public partial class ProyectoPrograDbContext : DbContext
             entity.ToTable("LogsEjecucion");
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
-            entity.Property(e => e.EstadoId).HasColumnName("EstadoID");
+            entity.Property(e => e.EstadoID).HasColumnName("EstadoID");
             entity.Property(e => e.FechaLog)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.TareaId).HasColumnName("TareaID");
 
             entity.HasOne(d => d.Estado).WithMany(p => p.LogsEjecucions)
-                .HasForeignKey(d => d.EstadoId)
+                .HasForeignKey(d => d.EstadoID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_LogsEjecucion_EstadosTarea");
 
@@ -67,13 +66,13 @@ public partial class ProyectoPrograDbContext : DbContext
 
         modelBuilder.Entity<PrioridadesTarea>(entity =>
         {
-            entity.HasKey(e => e.PrioridadId).HasName("PK__Priorida__393917CE87210E18");
+            entity.HasKey(e => e.PrioridadID).HasName("PK__Priorida__393917CE87210E18");
 
             entity.ToTable("PrioridadesTarea");
 
             entity.HasIndex(e => e.NivelPrioridad, "UQ__Priorida__9A68DDA10AB71BC5").IsUnique();
 
-            entity.Property(e => e.PrioridadId).HasColumnName("PrioridadID");
+            entity.Property(e => e.PrioridadID).HasColumnName("PrioridadID");
             entity.Property(e => e.NivelPrioridad).HasMaxLength(20);
         });
 
@@ -82,22 +81,22 @@ public partial class ProyectoPrograDbContext : DbContext
             entity.HasKey(e => e.TareaId).HasName("PK__Tareas__5CD83671F8947DAD");
 
             entity.Property(e => e.TareaId).HasColumnName("TareaID");
-            entity.Property(e => e.EstadoId).HasColumnName("EstadoID");
+            entity.Property(e => e.EstadoID).HasColumnName("EstadoID");
             entity.Property(e => e.FechaCreacion)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaEjecucion).HasColumnType("datetime");
             entity.Property(e => e.FechaFinalizacion).HasColumnType("datetime");
             entity.Property(e => e.Nombre).HasMaxLength(100);
-            entity.Property(e => e.PrioridadId).HasColumnName("PrioridadID");
+            entity.Property(e => e.PrioridadID).HasColumnName("PrioridadID");
 
             entity.HasOne(d => d.Estado).WithMany(p => p.Tareas)
-                .HasForeignKey(d => d.EstadoId)
+                .HasForeignKey(d => d.EstadoID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Tareas_EstadosTarea");
 
             entity.HasOne(d => d.Prioridad).WithMany(p => p.Tareas)
-                .HasForeignKey(d => d.PrioridadId)
+                .HasForeignKey(d => d.PrioridadID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Tareas_PrioridadesTarea");
         });

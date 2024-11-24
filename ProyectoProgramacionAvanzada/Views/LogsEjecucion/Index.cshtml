@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProyectoProgramacionAvanzada.Models.LogsEjecucion>
+@model IEnumerable<ProyectoProgramacionAvanzada.Models.LogsEjecucion>
 
 @{
     ViewData["Title"] = "Index";
@@ -37,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.FechaLog)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado.EstadoId)
+                @Html.DisplayFor(modelItem => item.Estado.EstadoID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Tarea.TareaId)

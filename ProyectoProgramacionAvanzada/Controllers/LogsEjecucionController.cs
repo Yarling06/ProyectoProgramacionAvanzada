@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,7 +66,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(_context.EstadosTareas, "EstadoId", "EstadoId", logsEjecucion.EstadoId);
+            ViewData["EstadoID"] = new SelectList(_context.EstadosTareas, "EstadoID", "EstadoID", logsEjecucion.EstadoID);
             ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaId", logsEjecucion.TareaId);
             return View(logsEjecucion);
         }
@@ -84,8 +84,8 @@ namespace ProyectoProgramacionAvanzada.Controllers
             {
                 return NotFound();
             }
-            ViewData["EstadoId"] = new SelectList(_context.EstadosTareas, "EstadoId", "EstadoId", logsEjecucion.EstadoId);
-            ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaId", logsEjecucion.TareaId);
+            ViewData["EstadoID"] = new SelectList(_context.EstadosTareas, "EstadoID", "EstadoID", logsEjecucion.EstadoID);
+            ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaID", logsEjecucion.TareaId);
             return View(logsEjecucion);
         }
 
@@ -121,7 +121,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(_context.EstadosTareas, "EstadoId", "EstadoId", logsEjecucion.EstadoId);
+            ViewData["EstadoID"] = new SelectList(_context.EstadosTareas, "EstadoID", "EstadoID", logsEjecucion.EstadoID);
             ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaId", logsEjecucion.TareaId);
             return View(logsEjecucion);
         }

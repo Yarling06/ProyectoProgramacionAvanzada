@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProyectoProgramacionAvanzada.Models.PrioridadesTarea>
+@model IEnumerable<ProyectoProgramacionAvanzada.Models.PrioridadesTarea>
 
 @{
     ViewData["Title"] = "Index";
@@ -25,9 +25,9 @@
                 @Html.DisplayFor(modelItem => item.NivelPrioridad)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PrioridadId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PrioridadId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PrioridadId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PrioridadID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PrioridadID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PrioridadID">Delete</a>
             </td>
         </tr>
 }

@@ -21,7 +21,9 @@ namespace ProyectoProgramacionAvanzada.Controllers
         // GET: Tarea
         public async Task<IActionResult> Index()
         {
-            var proyectoPrograDbContext = _context.Tareas.Include(t => t.Estado).Include(t => t.Prioridad);
+            var proyectoPrograDbContext = _context.Tareas
+                .Include(t => t.Estado)
+                .Include(t => t.Prioridad);
             return View(await proyectoPrograDbContext.ToListAsync());
         }
 
@@ -48,70 +50,95 @@ namespace ProyectoProgramacionAvanzada.Controllers
         // GET: Tarea/Create
         public IActionResult Create()
         {
-            ViewData["EstadoId"] = new SelectList(_context.EstadosTareas, "EstadoId", "EstadoId");
-            ViewData["PrioridadId"] = new SelectList(_context.PrioridadesTareas, "PrioridadId", "PrioridadId");
+            // Asegúrate de que los datos para los select se pasen correctamente
+            ViewBag.EstadoID = new SelectList(_context.EstadosTareas, "EstadoID", "NombreEstado");
+            ViewBag.PrioridadID = new SelectList(_context.PrioridadesTareas, "PrioridadID", "NivelPrioridad");
             return View();
         }
 
         // POST: Tarea/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Nombre,Descripcion,PrioridadID,EstadoID,FechaEjecucion,FechaFinalizacion")] Tarea tarea)
+        {
+            if (!ModelState.IsValid)
+            {
+                tarea.FechaCreacion = DateTime.Now; // Configura la fecha de creación
+                _context.Tareas.Add(tarea); // Agrega la tarea al contexto
+                await _context.SaveChangesAsync(); // Guarda los cambios en la base de datos
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Pasar las opciones a la vista nuevamente si el modelo no es válido
+            ViewBag.EstadoID = new SelectList(_context.EstadosTareas, "EstadoID", "NombreEstado", tarea.EstadoID);
+            ViewBag.PrioridadID = new SelectList(_context.PrioridadesTareas, "PrioridadID", "NivelPrioridad", tarea.PrioridadID);
+            return View(tarea);
+        }
 
         // GET: Tarea/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return NotFound(); // Si no hay ID, redirige a NotFound
             }
 
-            var tarea = await _context.Tareas.FindAsync(id);
+            // Buscar la tarea por su ID
+            var tarea = await _context.Tareas
+                                      .Include(t => t.Estado)    // Incluimos la entidad Estado
+                                      .Include(t => t.Prioridad) // Incluimos la entidad Prioridad
+                                      .FirstOrDefaultAsync(m => m.TareaId == id); // Usamos FirstOrDefaultAsync para obtener la tarea
+
             if (tarea == null)
             {
-                return NotFound();
+                return NotFound(); // Si la tarea no existe, redirige a NotFound
             }
-            ViewData["EstadoId"] = new SelectList(_context.EstadosTareas, "EstadoId", "EstadoId", tarea.EstadoId);
-            ViewData["PrioridadId"] = new SelectList(_context.PrioridadesTareas, "PrioridadId", "PrioridadId", tarea.PrioridadId);
+
+            // Creamos las listas para los dropdowns de Estado y Prioridad
+            ViewBag.EstadoID = new SelectList(_context.EstadosTareas, "EstadoID", "NombreEstado", tarea.EstadoID);
+            ViewBag.PrioridadID = new SelectList(_context.PrioridadesTareas, "PrioridadID", "NivelPrioridad", tarea.PrioridadID);
+
+            // Retornamos la vista con los datos de la tarea
             return View(tarea);
         }
-
-        // POST: Tarea/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TareaId,Nombre,Descripcion,PrioridadId,EstadoId,FechaCreacion,FechaEjecucion,FechaFinalizacion")] Tarea tarea)
+        public async Task<IActionResult> Edit(int id, [Bind("TareaId,Nombre,Descripcion,PrioridadID,EstadoID,FechaCreacion,FechaEjecucion,FechaFinalizacion")] Tarea tarea)
         {
+            // Verifica que el ID de la tarea coincida con el parámetro de ID.
             if (id != tarea.TareaId)
             {
-                return NotFound();
+                return NotFound();  // Si los IDs no coinciden, se retorna un error 404
             }
 
+            // Verifica si el modelo es válido
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Marca la tarea como modificada y guarda los cambios
                     _context.Update(tarea);
                     await _context.SaveChangesAsync();
+
+                    // Redirige al índice (lista de tareas)
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TareaExists(tarea.TareaId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    // Si ocurre un error de concurrencia, simplemente lanza la excepción
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(_context.EstadosTareas, "EstadoId", "EstadoId", tarea.EstadoId);
-            ViewData["PrioridadId"] = new SelectList(_context.PrioridadesTareas, "PrioridadId", "PrioridadId", tarea.PrioridadId);
+
+            // Si el modelo no es válido, recarga los datos de estado y prioridad para mostrar en la vista
+            ViewBag.EstadoID = new SelectList(_context.EstadosTareas, "EstadoID", "NombreEstado", tarea.EstadoID);
+            ViewBag.PrioridadID = new SelectList(_context.PrioridadesTareas, "PrioridadID", "NivelPrioridad", tarea.PrioridadID);
+
+            // Devuelve la vista con los datos actuales de la tarea
             return View(tarea);
         }
+
 
         // GET: Tarea/Delete/5
         public async Task<IActionResult> Delete(int? id)

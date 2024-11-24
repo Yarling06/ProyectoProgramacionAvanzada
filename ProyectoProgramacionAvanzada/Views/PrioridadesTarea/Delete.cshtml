@@ -1,4 +1,4 @@
-﻿@model ProyectoProgramacionAvanzada.Models.PrioridadesTarea
+@model ProyectoProgramacionAvanzada.Models.PrioridadesTarea
 
 @{
     ViewData["Title"] = "Delete";
@@ -20,7 +20,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="PrioridadId" />
+        <input type="hidden" asp-for="PrioridadID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

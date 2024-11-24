@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ProyectoProgramacionAvanzada.Models;
 
-public partial class PrioridadesTarea
+public class PrioridadesTarea
 {
-    public int PrioridadId { get; set; }
+    public int PrioridadID { get; set; }
 
     public string NivelPrioridad { get; set; } = null!;
 

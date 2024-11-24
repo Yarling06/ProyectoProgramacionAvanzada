@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +33,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
             }
 
             var prioridadesTarea = await _context.PrioridadesTareas
-                .FirstOrDefaultAsync(m => m.PrioridadId == id);
+                .FirstOrDefaultAsync(m => m.PrioridadID == id);
             if (prioridadesTarea == null)
             {
                 return NotFound();
@@ -87,7 +87,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PrioridadId,NivelPrioridad")] PrioridadesTarea prioridadesTarea)
         {
-            if (id != prioridadesTarea.PrioridadId)
+            if (id != prioridadesTarea.PrioridadID)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PrioridadesTareaExists(prioridadesTarea.PrioridadId))
+                    if (!PrioridadesTareaExists(prioridadesTarea.PrioridadID))
                     {
                         return NotFound();
                     }
@@ -124,7 +124,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
             }
 
             var prioridadesTarea = await _context.PrioridadesTareas
-                .FirstOrDefaultAsync(m => m.PrioridadId == id);
+                .FirstOrDefaultAsync(m => m.PrioridadID == id);
             if (prioridadesTarea == null)
             {
                 return NotFound();
@@ -150,7 +150,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
 
         private bool PrioridadesTareaExists(int id)
         {
-            return _context.PrioridadesTareas.Any(e => e.PrioridadId == id);
+            return _context.PrioridadesTareas.Any(e => e.PrioridadID == id);
         }
     }
 }
