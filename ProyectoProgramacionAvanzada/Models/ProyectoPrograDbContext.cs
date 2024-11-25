@@ -53,7 +53,7 @@ public partial class ProyectoPrograDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.TareaId).HasColumnName("TareaID");
 
-            entity.HasOne(d => d.Estado).WithMany(p => p.LogsEjecucions)
+            entity.HasOne(d => d.Estado).WithMany(p => p.LogsEjecucion)
                 .HasForeignKey(d => d.EstadoID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_LogsEjecucion_EstadosTarea");
@@ -78,27 +78,26 @@ public partial class ProyectoPrograDbContext : DbContext
 
         modelBuilder.Entity<Tarea>(entity =>
         {
-            entity.HasKey(e => e.TareaId).HasName("PK__Tareas__5CD83671F8947DAD");
+            entity.HasKey(e => e.TareaId).HasName("PK_Tareas");
 
             entity.Property(e => e.TareaId).HasColumnName("TareaID");
-            entity.Property(e => e.EstadoID).HasColumnName("EstadoID");
-            entity.Property(e => e.FechaCreacion)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.Nombre).HasMaxLength(100).IsRequired(); // Campo obligatorio
+            entity.Property(e => e.Descripcion).IsRequired();             // Campo obligatorio
+            entity.Property(e => e.FechaCreacion).HasColumnType("datetime").HasDefaultValueSql("GETDATE()");
             entity.Property(e => e.FechaEjecucion).HasColumnType("datetime");
             entity.Property(e => e.FechaFinalizacion).HasColumnType("datetime");
-            entity.Property(e => e.Nombre).HasMaxLength(100);
-            entity.Property(e => e.PrioridadID).HasColumnName("PrioridadID");
 
-            entity.HasOne(d => d.Estado).WithMany(p => p.Tareas)
-                .HasForeignKey(d => d.EstadoID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Tareas_EstadosTarea");
+            entity.HasOne(d => d.Estado)
+                  .WithMany(p => p.Tareas)
+                  .HasForeignKey(d => d.EstadoID)
+                  .OnDelete(DeleteBehavior.ClientSetNull) // Prevenir eliminaciones en cascada
+                  .HasConstraintName("FK_Tareas_EstadosTarea");
 
-            entity.HasOne(d => d.Prioridad).WithMany(p => p.Tareas)
-                .HasForeignKey(d => d.PrioridadID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Tareas_PrioridadesTarea");
+            entity.HasOne(d => d.Prioridad)
+                  .WithMany(p => p.Tareas)
+                  .HasForeignKey(d => d.PrioridadID)
+                  .OnDelete(DeleteBehavior.ClientSetNull)
+                  .HasConstraintName("FK_Tareas_PrioridadesTarea");
         });
 
         OnModelCreatingPartial(modelBuilder);

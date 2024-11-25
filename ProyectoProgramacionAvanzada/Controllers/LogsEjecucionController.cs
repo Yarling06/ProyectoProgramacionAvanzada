@@ -48,7 +48,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         // GET: LogsEjecucion/Create
         public IActionResult Create()
         {
-            ViewData["EstadoId"] = new SelectList(_context.EstadosTareas, "EstadoId", "EstadoId");
+            ViewData["EstadoID"] = new SelectList(_context.EstadosTareas, "EstadoID", "EstadoID");
             ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaId");
             return View();
         }

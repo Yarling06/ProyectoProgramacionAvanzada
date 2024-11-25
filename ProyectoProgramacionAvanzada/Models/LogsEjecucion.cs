@@ -18,4 +18,7 @@ public  class LogsEjecucion
     public virtual EstadosTarea Estado { get; set; } = null!;
 
     public virtual Tarea Tarea { get; set; } = null!;
+
+    public string Descripcion { get; set; } = null!;
+    public DateTime FechaCreacion { get; set; }
 }

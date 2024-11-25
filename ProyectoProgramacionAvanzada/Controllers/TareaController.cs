@@ -75,69 +75,71 @@ namespace ProyectoProgramacionAvanzada.Controllers
             return View(tarea);
         }
 
-        // GET: Tarea/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound(); // Si no hay ID, redirige a NotFound
-            }
 
-            // Buscar la tarea por su ID
+        // GET: Tarea/Edit/5
+        [HttpGet("Tarea/Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
             var tarea = await _context.Tareas
-                                      .Include(t => t.Estado)    // Incluimos la entidad Estado
-                                      .Include(t => t.Prioridad) // Incluimos la entidad Prioridad
-                                      .FirstOrDefaultAsync(m => m.TareaId == id); // Usamos FirstOrDefaultAsync para obtener la tarea
+                                       .Include(t => t.Estado)    // Incluir Estado
+                                       .Include(t => t.Prioridad) // Incluir Prioridad
+                                       .FirstOrDefaultAsync(t => t.TareaId == id);
 
             if (tarea == null)
             {
-                return NotFound(); // Si la tarea no existe, redirige a NotFound
+                return NotFound();
             }
 
-            // Creamos las listas para los dropdowns de Estado y Prioridad
+            // Pasar las opciones a la vista nuevamente si el modelo no es válido
             ViewBag.EstadoID = new SelectList(_context.EstadosTareas, "EstadoID", "NombreEstado", tarea.EstadoID);
             ViewBag.PrioridadID = new SelectList(_context.PrioridadesTareas, "PrioridadID", "NivelPrioridad", tarea.PrioridadID);
-
-            // Retornamos la vista con los datos de la tarea
             return View(tarea);
         }
-        //post
-        [HttpPost]
+
+
+        // POST: Tarea/Edit/5
+        [HttpPost("Tarea/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TareaId,Nombre,Descripcion,PrioridadID,EstadoID,FechaCreacion,FechaEjecucion,FechaFinalizacion")] Tarea tarea)
+        public async Task<IActionResult> Edit(int id, Tarea tarea)
         {
-            // Verifica que el ID de la tarea coincida con el parámetro de ID.
+            // Verificar si el ID de la tarea coincide con el de la tarea que estamos editando
             if (id != tarea.TareaId)
             {
-                return NotFound();  // Si los IDs no coinciden, se retorna un error 404
+                return NotFound();
             }
 
-            // Verifica si el modelo es válido
-            if (ModelState.IsValid)
+            // Validación del modelo
+            if (!ModelState.IsValid)
             {
                 try
                 {
-                    // Marca la tarea como modificada y guarda los cambios
+                    // Actualizar la tarea en la base de datos
                     _context.Update(tarea);
                     await _context.SaveChangesAsync();
-
-                    // Redirige al índice (lista de tareas)
-                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    // Si ocurre un error de concurrencia, simplemente lanza la excepción
-                    throw;
+                    // Si ocurre un error de concurrencia, verificar si la tarea existe
+                    if (!_context.Tareas.Any(e => e.TareaId == tarea.TareaId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+
+                // Redirigir al Index de tareas después de guardar los cambios
+                return RedirectToAction(nameof(Index));
             }
 
-            // Si el modelo no es válido, recarga los datos de estado y prioridad para mostrar en la vista
+            // Pasar las opciones a la vista nuevamente si el modelo no es válido
             ViewBag.EstadoID = new SelectList(_context.EstadosTareas, "EstadoID", "NombreEstado", tarea.EstadoID);
             ViewBag.PrioridadID = new SelectList(_context.PrioridadesTareas, "PrioridadID", "NivelPrioridad", tarea.PrioridadID);
-
-            // Devuelve la vista con los datos actuales de la tarea
             return View(tarea);
         }
+
 
 
         // GET: Tarea/Delete/5
