@@ -58,7 +58,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LogId,TareaId,EstadoId,Mensaje,FechaLog")] LogsEjecucion logsEjecucion)
+        public async Task<IActionResult> Create([Bind("LogId,TareaId,EstadoId,Mensaje,FechaLog,Descripcion,FechaCreacion")] LogsEjecucion logsEjecucion)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +72,7 @@ namespace ProyectoProgramacionAvanzada.Controllers
         }
 
         // GET: LogsEjecucion/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+ /*       public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -88,13 +88,43 @@ namespace ProyectoProgramacionAvanzada.Controllers
             ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaID", logsEjecucion.TareaId);
             return View(logsEjecucion);
         }
+ */
+
+        // GET: LogsEjecucion/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var logsEjecucion = await _context.LogsEjecucions.FindAsync(id);
+            if (logsEjecucion == null)
+            {
+                return NotFound();
+            }
+
+            // Asegurarse de que las listas de Tarea y Estado no estén vacías
+            var tareas = _context.Tareas.ToList();
+            var estados = _context.EstadosTareas.ToList();
+
+            // Verificar si las listas son nulas o vacías
+            if (!tareas.Any() || !estados.Any())
+            {
+                // Si no hay tareas o estados, puedes manejar este caso, mostrando un mensaje o redirigiendo a otra página
+                return RedirectToAction(nameof(Index)); // O redirigir a otra vista, si prefieres
+            }
+
+            ViewData["EstadoID"] = new SelectList(estados, "EstadoID", "EstadoID", logsEjecucion.EstadoID);
+            ViewData["TareaId"] = new SelectList(tareas, "TareaId", "TareaId", logsEjecucion.TareaId);
+
+            return View(logsEjecucion);
+        }
 
         // POST: LogsEjecucion/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LogId,TareaId,EstadoId,Mensaje,FechaLog")] LogsEjecucion logsEjecucion)
+        public async Task<IActionResult> Edit(int id, [Bind("LogId,TareaId,EstadoId,Mensaje,FechaLog,Descripcion,FechaCreacion")] LogsEjecucion logsEjecucion)
         {
             if (id != logsEjecucion.LogId)
             {
@@ -121,11 +151,55 @@ namespace ProyectoProgramacionAvanzada.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoID"] = new SelectList(_context.EstadosTareas, "EstadoID", "EstadoID", logsEjecucion.EstadoID);
-            ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaId", logsEjecucion.TareaId);
+
+            // Recargar las listas en caso de que el modelo no sea válido
+            var tareas = _context.Tareas.ToList();
+            var estados = _context.EstadosTareas.ToList();
+
+            ViewData["EstadoID"] = new SelectList(estados, "EstadoID", "EstadoID", logsEjecucion.EstadoID);
+            ViewData["TareaId"] = new SelectList(tareas, "TareaId", "TareaId", logsEjecucion.TareaId);
+
             return View(logsEjecucion);
         }
 
+
+        // POST: LogsEjecucion/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /*       [HttpPost]
+               [ValidateAntiForgeryToken]
+               public async Task<IActionResult> Edit(int id, [Bind("LogId,TareaId,EstadoId,Mensaje,FechaLog,Descripcion,FechaCreacion")] LogsEjecucion logsEjecucion)
+               {
+                   if (id != logsEjecucion.LogId)
+                   {
+                       return NotFound();
+                   }
+
+                   if (ModelState.IsValid)
+                   {
+                       try
+                       {
+                           _context.Update(logsEjecucion);
+                           await _context.SaveChangesAsync();
+                       }
+                       catch (DbUpdateConcurrencyException)
+                       {
+                           if (!LogsEjecucionExists(logsEjecucion.LogId))
+                           {
+                               return NotFound();
+                           }
+                           else
+                           {
+                               throw;
+                           }
+                       }
+                       return RedirectToAction(nameof(Index));
+                   }
+                   ViewData["EstadoID"] = new SelectList(_context.EstadosTareas, "EstadoID", "EstadoID", logsEjecucion.EstadoID);
+                   ViewData["TareaId"] = new SelectList(_context.Tareas, "TareaId", "TareaId", logsEjecucion.TareaId);
+                   return View(logsEjecucion);
+               }
+        */
         // GET: LogsEjecucion/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

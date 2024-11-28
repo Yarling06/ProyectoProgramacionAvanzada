@@ -24,6 +24,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Tarea)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -42,6 +48,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Tarea.TareaId)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaCreacion)
+            </td>
+            
             <td>
                 <a asp-action="Edit" asp-route-id="@item.LogId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.LogId">Details</a> |
